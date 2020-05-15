@@ -1,8 +1,50 @@
 //importar a biblioteca do express
 var express = require('express');
+//referencia a biblioteca mysql
+const dbMysql = require('mysql');
 
 //criar um objeto do express
 var app = express();
+
+//configurações da base de dados
+const db = dbMysql.createConnection({
+    host: "db4free.net",
+    user: "ikejima",
+    password: "saiko2018",
+    database: "kirarinha"
+});
+
+//Conectar na base de dados
+db.connect(function(erro){
+    if(erro)
+    throw erro;
+    console.log("Conectado com sucesso!");
+});
+
+//Executar Queries
+function executarSql(sql, response)
+{
+    db.query(sql, function(erros, results, fields){
+        if(erros)
+        response.json(erros);
+        else
+        response.json(results);
+        });
+        console.log('Query executando com sucesso!');
+}
+
+//Retornar usuários
+app.get('/usuarios', function(request, response){
+    const sqlQuery = "select * from usuarios";
+    executarSql(sqlQuery, response);
+});
+
+//Retornar apenas um usuário
+app.get('/usuarios/:id', function(request, response){
+    let id = request.params.id;
+    const sqlQuery = `select * from usuarios where idUsuario = ${id} ;`;
+    executarSql(sqlQuery,response);
+});
 
 //ponto de acesso - endpoint
 //request = requisições
