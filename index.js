@@ -8,10 +8,12 @@ var app = express();
 
 //configurações da base de dados
 const db = dbMysql.createConnection({
-    host: "db4free.net",
-    user: "ikejima",
-    password: "saiko2018",
-    database: "kirarinha"
+    host: "database-devops.mysql.database.azure.com",
+    user: "ikejimamikki@database-devops",
+    password: "Saiko2018",
+    database: "quinta_projeto",
+    port: 3306,
+    ssl: true
 });
 
 //Conectar na base de dados
@@ -45,6 +47,14 @@ app.get('/usuarios/:id', function(request, response){
     const sqlQuery = `select * from usuarios where idUsuario = ${id} ;`;
     executarSql(sqlQuery,response);
 });
+
+//SAlvar informações na tabela usuário
+app.post('/usuarios', function(request, response){
+    const {usuario, senha} = request.body;
+    const sql = `insert into usuario(usuario, senha) values('${usuario}', '${senha}')`;
+    execSQLQuery(sql, response);
+});
+
 
 //ponto de acesso - endpoint
 //request = requisições
