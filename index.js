@@ -3,8 +3,14 @@ var express = require('express');
 //referencia a biblioteca mysql
 const dbMysql = require('mysql');
 
+//incluir a requisição do json parse
+const bodyParser = require('body-parser');
+
 //criar um objeto do express
 var app = express();
+
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
 //configurações da base de dados
 const db = dbMysql.createConnection({
@@ -37,24 +43,37 @@ function executarSql(sql, response)
 
 //Retornar usuários
 app.get('/usuarios', function(request, response){
-    const sqlQuery = "select * from usuarios";
+    const sqlQuery = "select * from usuario";
     executarSql(sqlQuery, response);
 });
 
 //Retornar apenas um usuário
 app.get('/usuarios/:id', function(request, response){
     let id = request.params.id;
-    const sqlQuery = `select * from usuarios where idUsuario = ${id} ;`;
-    executarSql(sqlQuery,response);
+    const sqlQuery = `select * from usuario where idUsuario = ${id} ;`;
+    executarSql(sqlQuery, response);
 });
 
-//SAlvar informações na tabela usuário
+//Salvar informações na tabela usuário
 app.post('/usuarios', function(request, response){
     const {usuario, senha} = request.body;
     const sql = `insert into usuario(usuario, senha) values('${usuario}', '${senha}')`;
-    execSQLQuery(sql, response);
+    console.log(sql);
+    executarSql(sql, response);
 });
 
+//endpoint de delete
+app.delete('/usuarios/:id', function (request, response){
+    const id = request.params.id;
+    const sql = `delete from usuario where idUsuario = '${id}'`;
+    executarSql(sql, response);
+});
+
+app.put('/usuarios/', function(request, response){
+    const {usuario, senha, idUsuario} = request.body;
+    const sql = `update usuario set usuario = '${usuario}', '${senha}' where idUsuario - ${idUsuario}`;
+    executarSql(sql, response);
+});
 
 //ponto de acesso - endpoint
 //request = requisições
