@@ -17,8 +17,8 @@ function executarSql(sql, response) {
     //configurações da base de dados
     const db = dbMysql.createConnection({
         host: "database-devops.mysql.database.azure.com",
-        user: "ikejimamikki@database-devops",
-        password: "Saiko2018",
+        user: "usuario",
+        password: "Senha",
         database: "quinta_projeto",
         port: 3306,
         ssl: true
