@@ -24,9 +24,7 @@ function executarSql(sql, response) {
         ssl: true
     });
 
-    //Executar Queries
-    //function executarSql(sql, response)
-    //{
+
     //Conectar na base de dados
     db.connect(function (erro) {
         if (erro)
